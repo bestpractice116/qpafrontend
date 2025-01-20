@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { usePathname } from "next/navigation";
-import Image from "next/image";
-import { useState, useEffect } from "react";
+import { usePathname } from 'next/navigation';
+import Image from 'next/image';
+import { useState, useEffect } from 'react';
 import {
   HomeIcon,
   ProjectIcon,
@@ -11,26 +11,32 @@ import {
   KanbanIcon,
   TeamIcon,
   NoteIcon,
-  SettingIcon,
-} from "./Icons/CustomIcons";
-import SidebarItem from "./SidebarItem";
+  SettingIcon
+} from './Icons/CustomIcons';
+import SidebarItem from './SidebarItem';
 
 export default function AppSidebar() {
   const currentPath = usePathname();
   const [isFinanceOpen, setIsFinanceOpen] = useState(false);
+  const [role, setRole] = useState('');
+
+  useEffect(() => {
+    const role = localStorage.getItem('role');
+    setRole(role || '');
+  }, []);
 
   // Finance submenu items
   const financeMenuItems = [
-    { url: "/admin/finance", title: "Overview" },
-    { url: "/admin/finance/packages", title: "Package Management" },
-    { url: "/admin/finance/client-billing", title: "Client Billing" },
-    { url: "/admin/finance/payroll", title: "Payroll" },
-    { url: "/admin/finance/expenses", title: "Expenses" },
-    { url: "/admin/finance/invoices", title: "Invoices" },
-    { url: "/admin/finance/reporting", title: "Financial Reports" },
+    { url: `/${role}/finance`, title: 'Overview' },
+    { url: `/${role}/finance/packages`, title: 'Package Management' },
+    { url: `/${role}/finance/client-billing`, title: 'Client Billing' },
+    { url: `/${role}/finance/payroll`, title: 'Payroll' },
+    { url: `/${role}/finance/expenses`, title: 'Expenses' },
+    { url: `/${role}/finance/invoices`, title: 'Invoices' },
+    { url: `/${role}/finance/reporting`, title: 'Financial Reports' }
   ];
 
-  const isFinanceActive = currentPath.startsWith("/admin/finance");
+  const isFinanceActive = currentPath.startsWith(`/${role}/finance`);
 
   useEffect(() => {
     if (isFinanceActive) {
@@ -78,28 +84,28 @@ export default function AppSidebar() {
             </div>
 
             <SidebarItem
-              url="/admin/dashboard"
+              url={`/${role}/dashboard`}
               title="Dashboard"
               icon={HomeIcon}
-              isActive={currentPath === "/admin/dashboard"}
+              isActive={currentPath === `/${role}/dashboard`}
             />
             <SidebarItem
-              url="/admin/projects"
+              url={`/${role}/projects`}
               title="Projects"
               icon={ProjectIcon}
-              isActive={currentPath === "/admin/projects"}
+              isActive={currentPath === `/${role}/projects`}
             />
             <SidebarItem
-              url="/admin/tasks"
+              url={`/${role}/tasks`}
               title="Tasklist"
               icon={TaskIcon}
-              isActive={currentPath === "/admin/tasks"}
+              isActive={currentPath === `/${role}/tasks`}
             />
 
             {/* Finance Dropdown */}
             <div className="relative">
               <SidebarItem
-                url="/admin/finance"
+                url={`/${role}/finance`}
                 title="Finance"
                 icon={FinanceIcon}
                 isActive={isFinanceActive}
@@ -111,7 +117,7 @@ export default function AppSidebar() {
                 <div className="ml-7 mt-1 border-l border-gray-100/80 pl-3 max-h-[200px] overflow-y-auto custom-scrollbar">
                   <div className="space-y-1">
                     {financeMenuItems
-                      .filter((item) => item.title !== "Overview")
+                      .filter((item) => item.title !== 'Overview')
                       .map((item) => (
                         <SidebarItem
                           key={item.url}
@@ -128,10 +134,10 @@ export default function AppSidebar() {
 
             {/* Other Menu Items */}
             <SidebarItem
-              url="/admin/kanban"
+              url={`/${role}/kanban`}
               title="Kanban Board"
               icon={KanbanIcon}
-              isActive={currentPath === "/admin/kanban"}
+              isActive={currentPath === `/${role}/kanban`}
             />
 
             <div className="text-xs font-medium text-gray-400 uppercase px-3 mb-2 mt-6">
@@ -139,22 +145,22 @@ export default function AppSidebar() {
             </div>
 
             <SidebarItem
-              url="/admin/team"
+              url={`/${role}/team`}
               title="Team"
               icon={TeamIcon}
-              isActive={currentPath === "/admin/team"}
+              isActive={currentPath === `/${role}/team`}
             />
             <SidebarItem
-              url="/admin/notes"
+              url={`/${role}/notes`}
               title="Document/Notes"
               icon={NoteIcon}
-              isActive={currentPath === "/admin/notes"}
+              isActive={currentPath === `/${role}/notes`}
             />
             <SidebarItem
-              url="/admin/settings"
+              url={`/${role}/settings`}
               title="Setting"
               icon={SettingIcon}
-              isActive={currentPath === "/admin/settings"}
+              isActive={currentPath === `/${role}/settings`}
             />
           </nav>
         </div>

@@ -4,14 +4,19 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
-import { useState } from 'react';
-import { ToastContainer } from 'react-toastify';
+import { useState, useEffect } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
 
 type dataType = { email: string; password: string };
 
 export default function Login() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [isClient, setIsClient] = useState(false); // Track client-side rendering
+
+  useEffect(() => {
+    setIsClient(true); // Set to true once component is mounted on the client side
+  }, []);
 
   const {
     register,
@@ -23,6 +28,10 @@ export default function Login() {
       password: ''
     }
   });
+
+  const gotoDashboard = () => {
+    router.push('/admin/dashboard');
+  };
 
   const onSubmit = async (data: dataType) => {
     try {
@@ -38,18 +47,39 @@ export default function Login() {
           body: JSON.stringify({ email: data.email, password: data.password })
         }
       );
-      setLoading(false);
+
       if (status.status === 200) {
         const responseData = await status.json();
-        const { access_token, refresh_token } = responseData;
-        localStorage.setItem('access_token', access_token);
-        localStorage.setItem('refresh_token', refresh_token);
-        router.push('/admin/dashboard');
+        const { access_token, refresh_token, role, userId, username } =
+          responseData;
+
+        // Only access localStorage on the client side
+        if (isClient) {
+          localStorage.setItem('access_token', access_token);
+          localStorage.setItem('refresh_token', refresh_token);
+          localStorage.setItem('role', role);
+          localStorage.setItem('username', username);
+          localStorage.setItem('userId', userId);
+        }
+        if (role === 'admin') router.push('/admin/dashboard');
+        if (role === 'manager') router.push('/manager/dashboard');
+        if (role === 'member') router.push('/va/dashboard');
+        if (role === 'client') router.push('/client/dashboard');
+      } else {
+        toast.error('Invalid credentials');
       }
     } catch (error) {
       console.log(error);
+      toast.error('An error occurred while logging in');
+    } finally {
+      setLoading(false); // Ensure loading is reset on error as well
     }
   };
+
+  // Ensure rendering only happens on the client-side
+  if (!isClient) {
+    return null; // Return nothing while the component is being hydrated
+  }
 
   return (
     <>
