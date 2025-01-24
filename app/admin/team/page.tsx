@@ -47,7 +47,7 @@ export default function Team() {
     const token = localStorage.getItem('access_token');
     const fetchUsers = async () => {
       const response = await fetch(
-        'https://simple-crud-ldzp.onrender.com/admin/team',
+        `${process.env.NEXT_PUBLIC_PRODUCT_BACKEND_URL}/admin/team`,
         {
           method: 'GET',
           headers: {
@@ -96,7 +96,7 @@ export default function Team() {
 
     const fetchActiveProjects = async () => {
       const response = await fetch(
-        'https://simple-crud-ldzp.onrender.com/admin/activeProjects',
+        `${process.env.NEXT_PUBLIC_PRODUCT_BACKEND_URL}/admin/activeProjects`,
         {
           method: 'GET',
           headers: {
@@ -110,7 +110,7 @@ export default function Team() {
     };
     const fetchTasksInProgress = async () => {
       const response = await fetch(
-        'https://simple-crud-ldzp.onrender.com/admin/tasksInProgress',
+        `${process.env.NEXT_PUBLIC_PRODUCT_BACKEND_URL}/admin/tasksInProgress`,
         {
           method: 'GET',
           headers: {

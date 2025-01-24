@@ -6,7 +6,7 @@ const nextConfig: NextConfig = {
     return [
       {
         source: '/:path*',
-        destination: 'https://simple-crud-ldzp.onrender.com/:path*'
+        destination: 'http://localhost:3000/:path*'
       }
     ];
   }

@@ -14,14 +14,18 @@ import {
   SettingIcon
 } from './Icons/CustomIcons';
 import SidebarItem from './SidebarItem';
+import { TimerIcon } from 'lucide-react';
 
 export default function AppSidebar() {
   const currentPath = usePathname();
   const [isFinanceOpen, setIsFinanceOpen] = useState(false);
+  const [isTimerOpen, setIsTimerOpen] = useState(false);
   const [role, setRole] = useState('');
+  const [user, setUser] = useState('');
 
   useEffect(() => {
     const role = localStorage.getItem('role');
+    setUser(localStorage.getItem('username') || '');
     setRole(role || '');
   }, []);
 
@@ -36,7 +40,13 @@ export default function AppSidebar() {
     { url: `/${role}/finance/reporting`, title: 'Financial Reports' }
   ];
 
+  const timerMenuItems = [
+    { url: `/${role}/timer`, title: 'Start Timer' },
+    { url: `/${role}/timer/report`, title: 'Report' }
+  ];
+
   const isFinanceActive = currentPath.startsWith(`/${role}/finance`);
+  const isTimerActive = currentPath.startsWith(`/${role}/timer`);
 
   useEffect(() => {
     if (isFinanceActive) {
@@ -69,9 +79,7 @@ export default function AppSidebar() {
                 <h2 className="text-lg font-semibold text-gray-800">
                   Welcome back,
                 </h2>
-                <p className="text-xl font-bold text-brand-500">
-                  Bernadette Bawuah
-                </p>
+                <p className="text-xl font-bold text-brand-500">{user}</p>
                 <p className="text-sm text-gray-500">Have a great day!</p>
               </div>
             </div>
@@ -117,6 +125,34 @@ export default function AppSidebar() {
                 <div className="ml-7 mt-1 border-l border-gray-100/80 pl-3 max-h-[200px] overflow-y-auto custom-scrollbar">
                   <div className="space-y-1">
                     {financeMenuItems
+                      .filter((item) => item.title !== 'Overview')
+                      .map((item) => (
+                        <SidebarItem
+                          key={item.url}
+                          url={item.url}
+                          title={item.title}
+                          isSubmenu={true}
+                          isActive={currentPath === item.url}
+                        />
+                      ))}
+                  </div>
+                </div>
+              )}
+            </div>
+            <div className="relative">
+              <SidebarItem
+                url={`/${role}/timer`}
+                title="Timer"
+                icon={TimerIcon}
+                isActive={isTimerActive}
+                onClick={() => setIsTimerOpen(!isTimerOpen)}
+              />
+
+              {/* Finance Submenu */}
+              {isTimerOpen && role !== 'admin' && (
+                <div className="ml-7 mt-1 border-l border-gray-100/80 pl-3 max-h-[200px] overflow-y-auto custom-scrollbar">
+                  <div className="space-y-1">
+                    {timerMenuItems
                       .filter((item) => item.title !== 'Overview')
                       .map((item) => (
                         <SidebarItem

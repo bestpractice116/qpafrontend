@@ -1,4 +1,4 @@
-import { client } from '@/utils/customAxios';
+import { client } from '@/lib/utils/customAxios';
 import {
   createAsyncThunk,
   createSlice,
@@ -7,12 +7,12 @@ import {
 import type { TypeTask } from '@/lib/types';
 
 export const getAllTasks = createAsyncThunk('tasks/getAllTasks', async () => {
+  const role = localStorage.getItem('role');
   const data = await client(
-    'https://simple-crud-ldzp.onrender.com/admin/allTasks'
+    `${process.env.NEXT_PUBLIC_PRODUCT_BACKEND_URL}/${role}/allTasks`
   );
   return data;
 });
-
 interface TaskState {
   isFetching: boolean;
   tasks: TypeTask[];

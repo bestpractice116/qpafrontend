@@ -18,19 +18,19 @@ const WDSCard: React.FC<WDSCardProps> = ({ onClick }) => {
       {
         image: '/images/person1.jpg',
         role: 'Business Manager',
-        name: 'Sarah',
+        full_name: 'Sarah',
         status: 'Active'
       },
       {
         image: '/images/person1.jpg',
         role: 'Business Manager',
-        name: 'Sarah',
+        full_name: 'Sarah',
         status: 'Active'
       },
       {
         image: '/images/person1.jpg',
         role: 'Business Manager',
-        name: 'Sarah',
+        full_name: 'Sarah',
         status: 'Active'
       }
     ],

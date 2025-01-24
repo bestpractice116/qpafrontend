@@ -1,13 +1,10 @@
 'use client';
 
 import { TypeProject, type TypeUser } from '@/lib/types';
-import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
-import { toast, ToastContainer } from 'react-toastify';
 import Toast from '../toast';
-import { client } from '@/utils/customAxios';
+import { client } from '@/lib/utils/customAxios';
 
 export interface TaskItem {
   title?: string;

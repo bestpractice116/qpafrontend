@@ -18,6 +18,8 @@ export interface TypeUser {
   status?: string;
   assignedUserProject?: TypeProject[];
   assignedUserTask?: TypeTask[];
+  userTimeTrack?: TypeTimeTrack[];
+  image?: string;
 }
 
 export interface TypeClient {
@@ -55,6 +57,7 @@ export interface TypeClient {
   sign_date?: string;
   requestedClientProject?: TypeProject[];
   clientTask?: TypeTask[];
+  clientTimeTrack?: TypeTimeTrack[];
 }
 
 export interface TypeProject {
@@ -76,8 +79,9 @@ export interface TypeProject {
   additional_setting?: string;
   portal_access?: string;
   assignedProjectUser?: TypeUser[];
-  requestedProjectClient?: TypeClient;
+  requestedProjectClient?: TypeClient[];
   projectTask?: TypeTask[];
+  projectTimeTrack: TypeTimeTrack[];
 }
 
 export interface TypeTask {
@@ -89,7 +93,24 @@ export interface TypeTask {
   description?: string;
   estimated_time?: number;
   state?: string;
-  taskProject?: TypeProject;
-  taskClient?: TypeClient;
+  taskProject?: TypeProject[];
+  taskClient?: TypeClient[];
   assignedTaskUser?: TypeUser[];
+  taskTimeTrack?: TypeTimeTrack[];
+}
+
+export interface TypeTimeTrack {
+  id?: number;
+  start_time: Date;
+  end_time: Date;
+  estimated_time?: number;
+  title?: string;
+  projectId?: number;
+  userId?: number;
+  clientId?: number;
+  taskId?: number;
+  timeTrackProject?: TypeProject;
+  timeTrackClient?: TypeClient;
+  timeTrackUser?: TypeUser;
+  timeTrackTask?: TypeTask;
 }

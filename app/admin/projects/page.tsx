@@ -11,6 +11,9 @@ import ProjectDetailModal, {
   type ProjectData
 } from '@/components/modal/projectDetailsModal';
 import { useEffect, useState } from 'react';
+import type { AppDispatch, RootState } from '@/app/admin/reducers/store';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAllProjects } from '@/app/admin/reducers/projects';
 
 export interface ClientProps {
   id?: number;
@@ -23,35 +26,25 @@ export interface UserProps {
   position?: string;
 }
 
-interface ProjectProps {
-  id?: number;
-}
-
 export default function Projects() {
   const [index, setIndex] = useState(0);
+  const [count, setCount] = useState(false);
   const [detailData, setDetailData] = useState<ProjectData | null>(null);
   const [createModal, setCreateModal] = useState(false);
   const [detailModal, setDetailModal] = useState(false);
   const [clients, setClients] = useState<ClientProps[]>([]);
   const [users, setUsers] = useState<UserProps[]>([]);
-  const [projects, setProjects] = useState<ProjectProps[]>([]);
-  const [vaPackageNumber, setVaPackageNumber] = useState(0);
-  const [obmpakacageNumber, setObmPackageNumber] = useState(0);
-  const [vaPackageHour, setVaPackageHour] = useState(0);
-  const [obmpakacageHour, setObmPackageHour] = useState(0);
-  const [vaPackageUsedHour, setVaPackageUsedHour] = useState(0);
-  const [obmpakacageUsedHour, setObmPackageUsedHour] = useState(0);
-  const [smmPackageNumber, setSmmPackageNumber] = useState(0);
-  const [wdsPackageNumber, setWdsPackageNumber] = useState(0);
-  const [compSmmPackageNumer, setCompSmmPackageNumer] = useState(0.0);
-  const [compWdsPackageNumer, setCompWdsPackageNumer] = useState(0.0);
+  const dispatch: AppDispatch = useDispatch();
+  const projectCounts = useSelector(
+    (state: RootState) => state.projects.projectCounts
+  );
+  const projects = useSelector((state: RootState) => state.projects.projects);
 
-  console.log(projects);
   useEffect(() => {
     const token = localStorage.getItem('access_token');
     const fetchClients = async () => {
       const response = await fetch(
-        'https://simple-crud-ldzp.onrender.com/admin/clients',
+        `${process.env.NEXT_PUBLIC_PRODUCT_BACKEND_URL}/admin/clients`,
         {
           method: 'GET',
           headers: {
@@ -75,7 +68,7 @@ export default function Projects() {
 
     const fetchUsers = async () => {
       const res = await fetch(
-        'https://simple-crud-ldzp.onrender.com/admin/team',
+        `${process.env.NEXT_PUBLIC_PRODUCT_BACKEND_URL}/admin/team`,
         {
           method: 'GET',
           headers: {
@@ -96,90 +89,38 @@ export default function Projects() {
       // console.log(userArray);
       setUsers(userArray);
     };
-
-    const fetchProjects = async () => {
-      const response = await fetch(
-        'https://simple-crud-ldzp.onrender.com/admin/getAllProjects',
-        {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            authorization: `Bearer ${token}`
-          }
-        }
-      );
-      const data = await response.json();
-      let vapackagenum = 0;
-      let obmpackagenum = 0;
-      let smmpakcagenum = 0;
-      let wdspackagenum = 0;
-      let compsmmPackagenum = 0;
-      let compwdsPackagenum = 0;
-      let vapackagehour = 0;
-      let vapackageusedhour = 0;
-      let obmpackagehour = 0;
-      let obmpackageusedhour = 0;
-      const projectArray = data.map((project: TypeProject) => {
-        if (project.package_type === 'va') {
-          vapackagenum += 1;
-          vapackagehour += project.monthly_hours || 0;
-          project.projectTask?.map((task: TypeTask) => {
-            vapackageusedhour += task.estimated_time || 0;
-          });
-        }
-        if (project.package_type === 'obm') {
-          obmpackagenum += 1;
-          obmpackagehour += project.monthly_hours || 0;
-          project?.projectTask?.map((task: TypeTask) => {
-            obmpackageusedhour += task.estimated_time || 0;
-          });
-        }
-        if (project.package_type === 'smm') {
-          smmpakcagenum += 1;
-          if (project.state === 'completed') {
-            compsmmPackagenum += 1;
-          }
-        }
-        if (project.package_type === 'wds') {
-          wdspackagenum += 1;
-          if (project.state === 'completed') {
-            compwdsPackagenum += 1;
-          }
-        }
-        const temp = {
-          id: project.id,
-          title: project.title,
-          package_type: project.package_type,
-          start_date: project.start_date,
-          rate: project.rate
-        };
-        return temp;
-      });
-      // console.log(projectArray);
-      setProjects(projectArray);
-      setVaPackageNumber(vapackagenum);
-      setObmPackageNumber(obmpackagenum);
-      setSmmPackageNumber(smmpakcagenum);
-      setWdsPackageNumber(wdspackagenum);
-      if (smmpakcagenum !== 0)
-        setCompSmmPackageNumer((compsmmPackagenum * 100) / smmpakcagenum);
-      if (wdsPackageNumber !== 0)
-        setCompWdsPackageNumer((compwdsPackagenum * 100) / wdspackagenum);
-      setVaPackageHour(vapackagehour);
-      setObmPackageHour(obmpackagehour);
-      setVaPackageUsedHour(vapackageusedhour);
-      setObmPackageUsedHour(obmpackageusedhour);
-    };
-
     fetchClients();
     fetchUsers();
-    fetchProjects();
-  }, []);
+
+    dispatch(getAllProjects());
+  }, [dispatch, index, count]);
 
   const openNewProjectModal = () => {
     setCreateModal(true);
   };
 
+  const filterData = () => {
+    let result = [];
+    switch (index) {
+      case 0:
+        result = projects;
+        break;
+      case 1:
+        result = projects.filter(
+          (item) => item.package_type === 'va' || item.package_type === 'obm'
+        );
+        break;
+      default:
+        result = projects.filter(
+          (item) => item.package_type === 'wds' || item.package_type === 'smm'
+        );
+        break;
+    }
+    return result;
+  };
+
+  console.log(projects);
+  console.log(projectCounts);
   const closeNewProjectModal = () => {
     setCreateModal(false);
   };
@@ -218,6 +159,7 @@ export default function Projects() {
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
+                aria-hidden="true"
               >
                 <path
                   strokeLinecap="round"
@@ -237,17 +179,17 @@ export default function Projects() {
           <SimpleCard
             type={0}
             title="VA Packages"
-            maxVal={vaPackageHour}
-            usedVal={vaPackageUsedHour}
-            count={vaPackageNumber}
+            maxVal={projectCounts.vaPackageHour}
+            usedVal={projectCounts.vaPackageUsedHour}
+            count={projectCounts.vaPackageNum}
             completion={0}
           />
           <SimpleCard
             type={0}
             title="OBM Packages"
-            maxVal={obmpakacageHour}
-            usedVal={obmpakacageUsedHour}
-            count={obmpakacageNumber}
+            maxVal={projectCounts.obmPackageHour}
+            usedVal={projectCounts.obmPackageUsedHour}
+            count={projectCounts.obmPackageNum}
             completion={0}
           />
           <SimpleCard
@@ -255,16 +197,16 @@ export default function Projects() {
             title="SMM Packages"
             maxVal={600}
             usedVal={432}
-            count={smmPackageNumber}
-            completion={compSmmPackageNumer}
+            count={projectCounts.smmPackageNum}
+            completion={projectCounts.compSmmPackageNum}
           />
           <SimpleCard
             type={1}
             title="WDS Packages"
             maxVal={600}
             usedVal={432}
-            count={wdsPackageNumber}
-            completion={compWdsPackageNumer}
+            count={projectCounts.wdsPackageNum}
+            completion={projectCounts.compWdsPackageNum}
           />
         </div>
 
@@ -273,24 +215,22 @@ export default function Projects() {
 
         {/* <!-- Projects Grid --> */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {index === 0 ? (
-            <>
-              <VACard onClick={openProjectDetails} />
-              <OBMCard onClick={openProjectDetails} />
-              <SMMCard onClick={openProjectDetails} />
-              <WDSCard onClick={openProjectDetails} />
-            </>
-          ) : index === 1 ? (
-            <>
-              <VACard onClick={openProjectDetails} />
-              <OBMCard onClick={openProjectDetails} />
-            </>
-          ) : (
-            <>
-              <SMMCard onClick={openProjectDetails} />
-              <WDSCard onClick={openProjectDetails} />
-            </>
-          )}
+          {filterData().map((project, index) => (
+            <div key={index}>
+              {project.package_type === 'va' && (
+                <VACard onClick={openProjectDetails} project={project} />
+              )}
+              {project.package_type === 'obm' && (
+                <OBMCard onClick={openProjectDetails} />
+              )}
+              {project.package_type === 'smm' && (
+                <SMMCard onClick={openProjectDetails} />
+              )}
+              {project.package_type === 'wds' && (
+                <WDSCard onClick={openProjectDetails} />
+              )}
+            </div>
+          ))}
         </div>
       </div>
       {createModal ? (
@@ -304,7 +244,7 @@ export default function Projects() {
             id="modalOverlay"
             className="active modal-overlay fixed w-screen h-screen inset-0 bg-black/50 backdrop-blur-sm z-50"
             onClick={closeNewProjectModal}
-          ></button>
+          />
         </>
       ) : (
         <></>
@@ -315,7 +255,7 @@ export default function Projects() {
             id="projectDetailsOverlay"
             className="active modal-overlay fixed inset-0 bg-black/50 backdrop-blur-sm z-50"
             onClick={() => setDetailModal(false)}
-          ></button>
+          />
           <ProjectDetailModal
             onClose={() => setDetailModal(false)}
             data={detailData}

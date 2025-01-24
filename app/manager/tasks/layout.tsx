@@ -1,6 +1,6 @@
 'use client';
 import { Provider } from 'react-redux';
-import store from '../../reducers/store';
+import store from '../reducers/store';
 
 export default function TasksLayout({
   children

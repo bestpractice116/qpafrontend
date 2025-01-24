@@ -1,6 +1,9 @@
 'use client';
 
+import { PauseIcon, PlayIcon } from 'lucide-react';
 import Image from 'next/image';
+import { useTimerContext, useTimeTrackContext } from '@/hooks/use-store-hooks';
+import StopWatch from './timer/StopWatch';
 
 interface TasklistItemProps {
   id: number;
@@ -38,6 +41,13 @@ const TasklistItem: React.FC<TasklistItemProps> = ({
     time: time,
     company: company,
     startTime: startTime
+  };
+  const currentTrack = useTimeTrackContext();
+  const timerContext = useTimerContext();
+  const startTimer = () => {
+    timerContext.setTimer(true);
+    currentTrack.setTaskId(id);
+    currentTrack.setStartTime(new Date());
   };
 
   return (
@@ -155,10 +165,41 @@ const TasklistItem: React.FC<TasklistItemProps> = ({
                   Completed
                 </button>
               ) : (
-                // biome-ignore lint/a11y/useButtonType: <explanation>
-                <button className="p-1.5 text-white bg-primary rounded-lg text-xs font-medium">
-                  Start Timer
-                </button>
+                <div className="flex flex-row">
+                  <div className="px-4 h-[40px]  content-center text-blue-500">
+                    {currentTrack.taskId === id ||
+                    timerContext.timer === false ? (
+                      <StopWatch />
+                    ) : (
+                      <div className="text-red-500 font-serif">
+                        You have to finish the working for previous task.
+                      </div>
+                    )}
+                  </div>
+                  <div className="flex flex-row ml-4 content-center border rounded-lg">
+                    {!timerContext.timer && (
+                      <button
+                        onClick={startTimer}
+                        aria-label="Start timer"
+                        className="flex flex-row p-1.5 text-white bg-primary rounded-lg text-xs font-medium items-center"
+                      >
+                        Start Timer
+                        <PlayIcon />
+                      </button>
+                    )}
+                    {timerContext.timer && (
+                      <button
+                        type="submit"
+                        aria-label="Stop timer"
+                        disabled={currentTrack.taskId !== id}
+                        className="flex flex-row p-1.5 text-white bg-primary rounded-lg text-xs font-medium items-center"
+                      >
+                        Stop Timer
+                        <PauseIcon />
+                      </button>
+                    )}
+                  </div>
+                </div>
               )}
 
               <button
@@ -170,6 +211,7 @@ const TasklistItem: React.FC<TasklistItemProps> = ({
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
+                  aria-hidden={true}
                 >
                   <path
                     strokeLinecap="round"
@@ -188,6 +230,7 @@ const TasklistItem: React.FC<TasklistItemProps> = ({
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
+                  aria-hidden={true}
                 >
                   <path
                     strokeLinecap="round"

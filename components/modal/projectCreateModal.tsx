@@ -90,11 +90,11 @@ const ProjectCreateModal: React.FC<ProjectModalProps> = ({
   useEffect(() => {
     const updateProgress = () => {
       if (progressBar.current) {
-        if (step == 0) {
+        if (step === 0) {
           progressBar.current.style.width = '0%';
-        } else if (step == 1) {
+        } else if (step === 1) {
           progressBar.current.style.width = '50%';
-        } else if (step == 2) {
+        } else if (step === 2) {
           progressBar.current.style.width = '100%';
         }
       }
@@ -110,22 +110,23 @@ const ProjectCreateModal: React.FC<ProjectModalProps> = ({
           clientId: client,
           package_type: packageType,
           start_date:
-            packageType == 'va'
+            packageType === 'va'
               ? startDate
-              : packageType == 'obm'
+              : packageType === 'obm'
               ? startDate2
-              : packageType == 'smm'
+              : packageType === 'smm'
               ? startDate1
               : startDate3,
           additional_setting: additional.join(','),
-          portal_access: portals.join(',')
+          portal_access: portals.join(','),
+          projectTimeTrack: []
         };
 
         switch (packageType) {
           case 'va':
             data = {
               ...data,
-              monthly_hours: monthlyHours,
+              monthly_hours: monthlyHours || 0,
               rate: rate,
               rollover: enableRollover
             };
@@ -163,7 +164,7 @@ const ProjectCreateModal: React.FC<ProjectModalProps> = ({
 
         const token = localStorage.getItem('access_token');
         const response = await fetch(
-          'https://simple-crud-ldzp.onrender.com/admin/createProject',
+          `${process.env.NEXT_PUBLIC_PRODUCT_BACKEND_URL}/admin/createProject`,
           {
             method: 'POST',
             headers: {
@@ -260,7 +261,7 @@ const ProjectCreateModal: React.FC<ProjectModalProps> = ({
   };
 
   const handleContinue = () => {
-    if (step + 1 == 3) {
+    if (step + 1 === 3) {
     } else {
       const valid = validation();
       console.log(packageType);
@@ -327,7 +328,7 @@ const ProjectCreateModal: React.FC<ProjectModalProps> = ({
         setServiceError(true);
       }
 
-      if (!monthlyHours1 || !rate1 || !startDate2 || service.length == 0) {
+      if (!monthlyHours1 || !rate1 || !startDate2 || service.length === 0) {
         return false;
       }
       return true;
@@ -357,7 +358,7 @@ const ProjectCreateModal: React.FC<ProjectModalProps> = ({
         setPlatformError(true);
       }
 
-      if (!startDate1 || !duration || !packageLevel || platform.length == 0) {
+      if (!startDate1 || !duration || !packageLevel || platform.length === 0) {
         return false;
       }
       return true;
@@ -455,6 +456,7 @@ const ProjectCreateModal: React.FC<ProjectModalProps> = ({
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
+                  aria-hidden={true}
                 >
                   <path
                     strokeLinecap="round"
@@ -478,7 +480,7 @@ const ProjectCreateModal: React.FC<ProjectModalProps> = ({
                     className="relative h-full w-0 bg-primary transition-all duration-500 ease-in-out"
                   >
                     {/* <!-- Shine effect overlay --> */}
-                    <div className="shine-effect absolute inset-0"></div>
+                    <div className="shine-effect absolute inset-0" />
                   </div>
                 </div>
 
@@ -554,11 +556,12 @@ const ProjectCreateModal: React.FC<ProjectModalProps> = ({
               </div>
             </div>
           </div>
-          {step == 0 && (
+          {step === 0 && (
             <div className="step step-1 active">
               <div className="p-6 space-y-6">
                 {/* <!-- Project Name --> */}
                 <div>
+                  {/* biome-ignore lint/a11y/noLabelWithoutControl: <explanation> */}
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Project Name <span className="text-red-500">*</span>
                   </label>
@@ -582,12 +585,13 @@ const ProjectCreateModal: React.FC<ProjectModalProps> = ({
                       Project name is required
                     </div>
                   ) : (
-                    <div></div>
+                    <div />
                   )}
                 </div>
 
                 {/* <!-- Client Selection --> */}
                 <div>
+                  {/* biome-ignore lint/a11y/noLabelWithoutControl: <explanation> */}
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Client <span className="text-red-500">*</span>
                   </label>
@@ -618,18 +622,20 @@ const ProjectCreateModal: React.FC<ProjectModalProps> = ({
                       Please select a client
                     </div>
                   ) : (
-                    <div></div>
+                    <div />
                   )}
                 </div>
 
                 {/* <!-- Package Type Selection --> */}
                 <div>
+                  {/* biome-ignore lint/a11y/noLabelWithoutControl: <explanation> */}
                   <label className="block text-sm font-medium text-gray-700 mb-3">
                     Package Type <span className="text-red-500">*</span>
                   </label>
                   <div className="grid grid-cols-2 gap-4">
                     {/* <!-- Hourly Packages --> */}
                     <div className="space-y-3">
+                      {/* biome-ignore lint/a11y/noLabelWithoutControl: <explanation> */}
                       <label className="block text-sm font-medium text-gray-500">
                         Hourly Packages
                       </label>
@@ -641,7 +647,7 @@ const ProjectCreateModal: React.FC<ProjectModalProps> = ({
                           id="va-package"
                           className="peer hidden"
                           onChange={(e) => setPackageType(e.target.value)}
-                          checked={packageType == 'va'}
+                          checked={packageType === 'va'}
                         />
                         <label
                           htmlFor="va-package"
@@ -653,6 +659,7 @@ const ProjectCreateModal: React.FC<ProjectModalProps> = ({
                               fill="none"
                               stroke="currentColor"
                               viewBox="0 0 24 24"
+                              aria-hidden={true}
                             >
                               <path
                                 strokeLinecap="round"
@@ -681,7 +688,7 @@ const ProjectCreateModal: React.FC<ProjectModalProps> = ({
                           id="obm-package"
                           className="peer hidden"
                           onChange={(e) => setPackageType(e.target.value)}
-                          checked={packageType == 'obm'}
+                          checked={packageType === 'obm'}
                         />
                         <label
                           htmlFor="obm-package"
@@ -693,6 +700,7 @@ const ProjectCreateModal: React.FC<ProjectModalProps> = ({
                               fill="none"
                               stroke="currentColor"
                               viewBox="0 0 24 24"
+                              aria-hidden={true}
                             >
                               <path
                                 strokeLinecap="round"
@@ -716,6 +724,7 @@ const ProjectCreateModal: React.FC<ProjectModalProps> = ({
 
                     {/* <!-- Fixed Price Packages --> */}
                     <div className="space-y-3">
+                      {/* biome-ignore lint/a11y/noLabelWithoutControl: <explanation> */}
                       <label className="block text-sm font-medium text-gray-500">
                         Fixed Price Packages
                       </label>
@@ -727,7 +736,7 @@ const ProjectCreateModal: React.FC<ProjectModalProps> = ({
                           id="smm-package"
                           className="peer hidden"
                           onChange={(e) => setPackageType(e.target.value)}
-                          checked={packageType == 'smm'}
+                          checked={packageType === 'smm'}
                         />
                         <label
                           htmlFor="smm-package"
@@ -739,6 +748,7 @@ const ProjectCreateModal: React.FC<ProjectModalProps> = ({
                               fill="none"
                               stroke="currentColor"
                               viewBox="0 0 24 24"
+                              aria-hidden={true}
                             >
                               <path
                                 strokeLinecap="round"
@@ -767,7 +777,7 @@ const ProjectCreateModal: React.FC<ProjectModalProps> = ({
                           id="wds-package"
                           className="peer hidden"
                           onChange={(e) => setPackageType(e.target.value)}
-                          checked={packageType == 'wds'}
+                          checked={packageType === 'wds'}
                         />
                         <label
                           htmlFor="wds-package"
@@ -779,6 +789,7 @@ const ProjectCreateModal: React.FC<ProjectModalProps> = ({
                               fill="none"
                               stroke="currentColor"
                               viewBox="0 0 24 24"
+                              aria-hidden={true}
                             >
                               <path
                                 strokeLinecap="round"
@@ -805,22 +816,23 @@ const ProjectCreateModal: React.FC<ProjectModalProps> = ({
                       Please select a package type
                     </div>
                   ) : (
-                    <div></div>
+                    <div />
                   )}
                 </div>
               </div>
             </div>
           )}
-          {step == 1 && (
+          {step === 1 && (
             <div className="step step-2 active">
               {/* <!-- VA Package Form --> */}
-              {packageType == 'va' ? (
+              {packageType === 'va' ? (
                 <div className="p-6 space-y-6 active">
                   <h3 className="text-lg font-medium text-gray-900">
                     VA Package Details
                   </h3>
                   <div className="grid grid-cols-2 gap-4">
                     <div>
+                      {/* biome-ignore lint/a11y/noLabelWithoutControl: <explanation> */}
                       <label className="block text-sm font-medium text-gray-700 mb-1">
                         Monthly Hours
                         <span className="text-red-500">*</span>
@@ -848,6 +860,7 @@ const ProjectCreateModal: React.FC<ProjectModalProps> = ({
                       )}
                     </div>
                     <div>
+                      {/* biome-ignore lint/a11y/noLabelWithoutControl: <explanation> */}
                       <label className="block text-sm font-medium text-gray-700 mb-1">
                         Rate per Hour ($)
                         <span className="text-red-500">*</span>
@@ -877,6 +890,7 @@ const ProjectCreateModal: React.FC<ProjectModalProps> = ({
                     </div>
                   </div>
                   <div>
+                    {/* biome-ignore lint/a11y/noLabelWithoutControl: <explanation> */}
                     <label className="block text-sm font-medium text-gray-700 mb-1">
                       Start Date <span className="text-red-500">*</span>
                     </label>
@@ -897,7 +911,7 @@ const ProjectCreateModal: React.FC<ProjectModalProps> = ({
                         Please select a start date
                       </div>
                     ) : (
-                      <div></div>
+                      <div />
                     )}
                   </div>
                   <div className="flex items-center gap-2">
@@ -911,6 +925,7 @@ const ProjectCreateModal: React.FC<ProjectModalProps> = ({
                         setEnableRollover(e.target.checked);
                       }}
                     />
+                    {/* biome-ignore lint/a11y/noLabelWithoutControl: <explanation> */}
                     <label className="text-sm text-gray-700">
                       Enable hours rollover to next month
                     </label>
@@ -922,6 +937,7 @@ const ProjectCreateModal: React.FC<ProjectModalProps> = ({
                     Social Media Package Details
                   </h3>
                   <div>
+                    {/* biome-ignore lint/a11y/noLabelWithoutControl: <explanation> */}
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Platforms <span className="text-red-500">*</span>
                     </label>
@@ -954,6 +970,7 @@ const ProjectCreateModal: React.FC<ProjectModalProps> = ({
                   </div>
                   <div className="grid grid-cols-2 gap-4">
                     <div>
+                      {/* biome-ignore lint/a11y/noLabelWithoutControl: <explanation> */}
                       <label className="block text-sm font-medium text-gray-700 mb-1">
                         Start Date
                         <span className="text-red-500">*</span>
@@ -975,10 +992,11 @@ const ProjectCreateModal: React.FC<ProjectModalProps> = ({
                           Please select a start date
                         </div>
                       ) : (
-                        <div></div>
+                        <div />
                       )}
                     </div>
                     <div>
+                      {/* biome-ignore lint/a11y/noLabelWithoutControl: <explanation> */}
                       <label className="block text-sm font-medium text-gray-700 mb-1">
                         Duration <span className="text-red-500">*</span>
                       </label>
@@ -1003,11 +1021,12 @@ const ProjectCreateModal: React.FC<ProjectModalProps> = ({
                           Please select a duration
                         </div>
                       ) : (
-                        <div></div>
+                        <div />
                       )}
                     </div>
                   </div>
                   <div>
+                    {/* biome-ignore lint/a11y/noLabelWithoutControl: <explanation> */}
                     <label className="block text-sm font-medium text-gray-700 mb-1">
                       Package Level
                       <span className="text-red-500">*</span>
@@ -1073,6 +1092,7 @@ const ProjectCreateModal: React.FC<ProjectModalProps> = ({
                   </div>
                   <div className="grid grid-cols-2 gap-4">
                     <div>
+                      {/* biome-ignore lint/a11y/noLabelWithoutControl: <explanation> */}
                       <label className="block text-sm font-medium text-gray-700 mb-1">
                         Start Date
                         <span className="text-red-500">*</span>
@@ -1094,10 +1114,11 @@ const ProjectCreateModal: React.FC<ProjectModalProps> = ({
                           Please select a start date
                         </div>
                       ) : (
-                        <div></div>
+                        <div />
                       )}
                     </div>
                     <div>
+                      {/* biome-ignore lint/a11y/noLabelWithoutControl: <explanation> */}
                       <label className="block text-sm font-medium text-gray-700 mb-1">
                         Expected Duration
                         <span className="text-red-500">*</span>
@@ -1130,6 +1151,7 @@ const ProjectCreateModal: React.FC<ProjectModalProps> = ({
                     </div>
                   </div>
                   <div>
+                    {/* biome-ignore lint/a11y/noLabelWithoutControl: <explanation> */}
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Technologies <span className="text-red-500">*</span>
                     </label>
@@ -1174,6 +1196,7 @@ const ProjectCreateModal: React.FC<ProjectModalProps> = ({
                   </h3>
                   <div className="grid grid-cols-2 gap-4">
                     <div>
+                      {/* biome-ignore lint/a11y/noLabelWithoutControl: <explanation> */}
                       <label className="block text-sm font-medium text-gray-700 mb-1">
                         Monthly Hours
                         <span className="text-red-500">*</span>
@@ -1201,6 +1224,7 @@ const ProjectCreateModal: React.FC<ProjectModalProps> = ({
                       )}
                     </div>
                     <div>
+                      {/* biome-ignore lint/a11y/noLabelWithoutControl: <explanation> */}
                       <label className="block text-sm font-medium text-gray-700 mb-1">
                         Rate per Hour ($){' '}
                         <span className="text-red-500">*</span>
@@ -1225,11 +1249,12 @@ const ProjectCreateModal: React.FC<ProjectModalProps> = ({
                           Please enter valid hourly rate
                         </div>
                       ) : (
-                        <div></div>
+                        <div />
                       )}
                     </div>
                   </div>
                   <div>
+                    {/* biome-ignore lint/a11y/noLabelWithoutControl: <explanation> */}
                     <label className="block text-sm font-medium text-gray-700 mb-1">
                       Start Date <span className="text-red-500">*</span>
                     </label>
@@ -1254,6 +1279,7 @@ const ProjectCreateModal: React.FC<ProjectModalProps> = ({
                     )}
                   </div>
                   <div>
+                    {/* biome-ignore lint/a11y/noLabelWithoutControl: <explanation> */}
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Services Required
                       <span className="text-red-500">*</span>
@@ -1302,6 +1328,7 @@ const ProjectCreateModal: React.FC<ProjectModalProps> = ({
 
                 {/* <!-- Team Members --> */}
                 <div>
+                  {/* biome-ignore lint/a11y/noLabelWithoutControl: <explanation> */}
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Assign Team Members <span className="text-red-500">*</span>
                   </label>
@@ -1369,7 +1396,7 @@ const ProjectCreateModal: React.FC<ProjectModalProps> = ({
                           setPortalAccess(e.target.checked);
                         }}
                       />
-                      <div className="w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-brand-500/20 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brand-500"></div>
+                      <div className="w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-brand-500/20 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brand-500" />
                     </label>
                   </div>
                   {portalAccess ? (
@@ -1397,7 +1424,7 @@ const ProjectCreateModal: React.FC<ProjectModalProps> = ({
                       ))}
                     </div>
                   ) : (
-                    <div></div>
+                    <div />
                   )}
                 </div>
 
@@ -1455,7 +1482,7 @@ const ProjectCreateModal: React.FC<ProjectModalProps> = ({
               >
                 Cancel
               </button>
-              {step == 2 ? (
+              {step === 2 ? (
                 <button
                   type="button"
                   onClick={createProject}

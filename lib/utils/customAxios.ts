@@ -42,6 +42,7 @@ export const client = async (
   // if (res.status !== 200) {
   //   return toast(data.message);
   // }
-
+  // console.log('ok');
+  // console.log(data);
   return data;
 };

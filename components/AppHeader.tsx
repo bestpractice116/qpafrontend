@@ -1,10 +1,15 @@
 'use client';
+import { getInitials } from '@/lib/utils/functions';
 import Link from 'next/link';
 import { useState, useEffect, useRef } from 'react';
+import DailyWorkWatch from './timer/DailyWorkWatch';
 
 const AppHeader = () => {
   const [isNotificationsMenuOpen, setNotificationsMenuOpen] = useState(false);
   const [isProfileMenuOpen, setProfileMenuOpen] = useState(false);
+  const [user, setUser] = useState('');
+  const [role, setRole] = useState('');
+  const [email, setEmail] = useState('');
   const notificationsRef = useRef<HTMLDivElement | null>(null);
   const profileRef = useRef<HTMLDivElement | null>(null);
 
@@ -28,7 +33,9 @@ const AppHeader = () => {
         setProfileMenuOpen(false);
       }
     };
-
+    setUser(localStorage.getItem('username') || '');
+    setRole(localStorage.getItem('role') || '');
+    setEmail(localStorage.getItem('email') || '');
     document.addEventListener('mousedown', handleOutsideClick);
     return () => {
       document.removeEventListener('mousedown', handleOutsideClick);
@@ -91,7 +98,7 @@ const AppHeader = () => {
                     />
                   </svg>
                   <div className="text-sm font-medium text-gray-900">
-                    07:45:22
+                    <DailyWorkWatch />
                   </div>
                 </div>
                 <button className="flex items-center gap-2 px-3 py-1.5 bg-brand-500 text-white rounded-lg text-sm hover:bg-brand-600 transition-colors">
@@ -203,15 +210,20 @@ const AppHeader = () => {
                 >
                   <div className="relative">
                     <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-500 to-teal-400 flex items-center justify-center text-sm font-medium text-white shadow-lg shadow-brand-500/20">
-                      JD
+                      {getInitials(user)}
                     </div>
                     <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-green-500 rounded-full ring-2 ring-white"></div>
                   </div>
                   <div className="text-left">
                     <div className="text-sm font-medium text-gray-700">
-                      Bernadette Bawuah
+                      {user}
                     </div>
-                    <div className="text-xs text-gray-500">Admin</div>
+                    <div className="text-xs text-gray-500">
+                      {role === 'admin' && 'Admin'}
+                      {role === 'manager' && 'Project Manager'}
+                      {role === 'member' && 'Virtual Assistant'}
+                      {role === 'client' && 'Client'}
+                    </div>
                   </div>
                 </button>
 
@@ -224,15 +236,13 @@ const AppHeader = () => {
                     <div className="p-4 border-b border-gray-100">
                       <div className="flex items-center gap-3">
                         <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-brand-500 to-teal-400 flex items-center justify-center text-lg font-medium text-white">
-                          JD
+                          {getInitials(user)}
                         </div>
                         <div>
                           <div className="text-sm font-medium text-gray-900">
-                            Bernadette Bawuah
+                            {user}
                           </div>
-                          <div className="text-xs text-gray-500">
-                            info.qpas@example.com
-                          </div>
+                          <div className="text-xs text-gray-500">{email}</div>
                         </div>
                       </div>
                     </div>

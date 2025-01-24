@@ -67,6 +67,7 @@ export default function ClientTable() {
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
+                  aria-hidden={true}
                 >
                   <path
                     strokeLinecap="round"
@@ -85,6 +86,7 @@ export default function ClientTable() {
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
+                  aria-hidden={true}
                 >
                   <path
                     strokeLinecap="round"
@@ -103,6 +105,7 @@ export default function ClientTable() {
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
+                  aria-hidden={true}
                 >
                   <path
                     strokeLinecap="round"
@@ -121,6 +124,7 @@ export default function ClientTable() {
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
+                  aria-hidden={true}
                 >
                   <path
                     strokeLinecap="round"
@@ -139,6 +143,7 @@ export default function ClientTable() {
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
+                  aria-hidden={true}
                 >
                   <path
                     strokeLinecap="round"
@@ -190,7 +195,7 @@ export default function ClientTable() {
             <td className="px-4 py-3 text-gray-900 font-medium">$45,000</td>
             <td className="px-4 py-3">
               <div className="flex items-center gap-1.5">
-                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500"></div>
+                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
                 <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700">
                   Active
                 </span>

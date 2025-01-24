@@ -4,7 +4,7 @@ import MemberCard2, { type Item } from '@/components/card/memberCard2';
 import { useEffect, useState } from 'react';
 // import teamMembers from '@/mockData/teamMembersData';
 import AddMemberModal from '@/components/modal/addMemberModal';
-import { TypeTask, TypeUser } from '@/lib/types';
+import type { TypeTask, TypeUser } from '@/lib/types';
 export default function Team() {
   const [filter, setFilter] = useState(0);
   const [memberModal, setMemberModal] = useState(false);
@@ -47,7 +47,7 @@ export default function Team() {
     const token = localStorage.getItem('access_token');
     const fetchUsers = async () => {
       const response = await fetch(
-        'https://simple-crud-ldzp.onrender.com/va/team',
+        `${process.env.NEXT_PUBLIC_PRODUCT_BACKEND_URL}/va/team`,
         {
           method: 'GET',
           headers: {
@@ -96,7 +96,7 @@ export default function Team() {
 
     const fetchActiveProjects = async () => {
       const response = await fetch(
-        'https://simple-crud-ldzp.onrender.com/va/activeProjects',
+        `${process.env.NEXT_PUBLIC_PRODUCT_BACKEND_URL}/va/activeProjects`,
         {
           method: 'GET',
           headers: {
@@ -110,7 +110,7 @@ export default function Team() {
     };
     const fetchTasksInProgress = async () => {
       const response = await fetch(
-        'https://simple-crud-ldzp.onrender.com/va/tasksForUser',
+        `${process.env.NEXT_PUBLIC_PRODUCT_BACKEND_URL}/va/tasksForUser`,
         {
           method: 'GET',
           headers: {

@@ -32,8 +32,6 @@ export default function Projects() {
   const [detailData, setDetailData] = useState<ProjectData | null>(null);
   const [createModal, setCreateModal] = useState(false);
   const [detailModal, setDetailModal] = useState(false);
-  const [clients, setClients] = useState<ClientProps[]>([]);
-  const [users, setUsers] = useState<UserProps[]>([]);
   const [projects, setProjects] = useState<ProjectProps[]>([]);
   const [vaPackageNumber, setVaPackageNumber] = useState(0);
   const [obmpakacageNumber, setObmPackageNumber] = useState(0);
@@ -49,54 +47,10 @@ export default function Projects() {
   console.log(projects);
   useEffect(() => {
     const token = localStorage.getItem('access_token');
-    const fetchClients = async () => {
-      const response = await fetch(
-        'https://simple-crud-ldzp.onrender.com/va/clients',
-        {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            authorization: `Bearer ${token}`
-          }
-        }
-      );
-      const data = await response.json();
-      // console.log(data);
-      const clientsArray = data.map((user: TypeUser) => {
-        const temp = {
-          full_name: user.full_name,
-          id: user.id
-        };
-        return temp;
-      });
-      // console.log(clientsArray);
-      setClients(clientsArray);
-    };
-
-    const fetchUsers = async () => {
-      const res = await fetch('https://simple-crud-ldzp.onrender.com/va/team', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          authorization: `Bearer ${token}`
-        }
-      });
-      const userData = await res.json();
-      const userArray = userData.map((user: TypeUser) => {
-        const temp = {
-          full_name: user.full_name,
-          position: user.position,
-          id: user.id
-        };
-        return temp;
-      });
-      // console.log(userArray);
-      setUsers(userArray);
-    };
 
     const fetchProjects = async () => {
       const response = await fetch(
-        'https://simple-crud-ldzp.onrender.com/va/getAllProjectsForUser',
+        `${process.env.NEXT_PUBLIC_PRODUCT_BACKEND_URL}/member/getAllProjects`,
         {
           method: 'GET',
           headers: {
@@ -167,9 +121,6 @@ export default function Projects() {
       setVaPackageUsedHour(vapackageusedhour);
       setObmPackageUsedHour(obmpackageusedhour);
     };
-
-    fetchClients();
-    fetchUsers();
     fetchProjects();
   }, []);
 
@@ -290,22 +241,7 @@ export default function Projects() {
           )}
         </div>
       </div>
-      {createModal ? (
-        <>
-          <ProjectCreateModal
-            closeEvent={closeNewProjectModal}
-            clients={clients}
-            users={users}
-          />
-          <button
-            id="modalOverlay"
-            className="active modal-overlay fixed w-screen h-screen inset-0 bg-black/50 backdrop-blur-sm z-50"
-            onClick={closeNewProjectModal}
-          ></button>
-        </>
-      ) : (
-        <></>
-      )}
+
       {detailModal ? (
         <>
           <button

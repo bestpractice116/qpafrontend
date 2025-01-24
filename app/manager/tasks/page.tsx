@@ -1,7 +1,7 @@
 'use client';
 
-import type { AppDispatch, RootState } from '@/app/reducers/store';
-import { getAllTasks } from '@/app/reducers/tasks';
+import type { AppDispatch, RootState } from '@/app/manager/reducers/store';
+import { getAllTasks } from '@/app/manager/reducers/tasks';
 import SimpleCard2 from '@/components/card/simpleCard2';
 import {
   CompleteIcon,
@@ -11,6 +11,7 @@ import {
 } from '@/components/Icons/TaskIcons';
 import EditTaskModal, { type TaskItem } from '@/components/modal/editTaskModal';
 import TasklistItem from '@/components/TasklistItem';
+import { isNonEmptyArray } from '@/lib/utils/functions';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast, ToastContainer } from 'react-toastify';
@@ -49,7 +50,7 @@ export default function Projects() {
   const handleDelete = async (id: number) => {
     const token = localStorage.getItem('access_token');
     const response = await fetch(
-      `https://simple-crud-ldzp.onrender.com/admin/deleteTask?taskId=${id}`,
+      `${process.env.NEXT_PUBLIC_PRODUCT_BACKEND_URL}/admin/deleteTask?taskId=${id}`,
       {
         method: 'DELETE',
         headers: {
@@ -214,7 +215,11 @@ export default function Projects() {
                   state={item.state || ''}
                   time={item.due_date || ''}
                   members={item.assignedTaskUser?.length || 0}
-                  company={item.taskClient?.business_name || 'Undefined'}
+                  company={
+                    isNonEmptyArray(item.taskClient)
+                      ? item.taskClient[0].business_address || 'Undefined'
+                      : 'Undefined'
+                  }
                   startTime={'Started:Oct 15,2024'}
                   onDetail={handleTask}
                   onDelete={handleDelete}

@@ -1,7 +1,7 @@
 'use client';
 
-import type { AppDispatch, RootState } from '@/app/reducers/store';
-import { getAllTasks } from '@/app/reducers/tasks';
+import type { AppDispatch, RootState } from '@/app/member/reducers/store';
+import { getAllTasks } from '@/app/member/reducers/tasks';
 import SimpleCard2 from '@/components/card/simpleCard2';
 import {
   CompleteIcon,
@@ -11,11 +11,12 @@ import {
 } from '@/components/Icons/TaskIcons';
 import EditTaskModal, { type TaskItem } from '@/components/modal/editTaskModal';
 import TasklistItem from '@/components/TasklistItem';
+import { isNonEmptyArray } from '@/lib/utils/functions';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast, ToastContainer } from 'react-toastify';
 
-export default function Projects() {
+export default function Tasks() {
   const [editModal, setEditModal] = useState(false);
   const [index, setIndex] = useState(0);
   const [count, setCount] = useState(false);
@@ -49,7 +50,7 @@ export default function Projects() {
   const handleDelete = async (id: number) => {
     const token = localStorage.getItem('access_token');
     const response = await fetch(
-      `https://simple-crud-ldzp.onrender.com/va/deleteTask?taskId=${id}`,
+      `${process.env.NEXT_PUBLIC_PRODUCT_BACKEND_URL}/member/deleteTask?taskId=${id}`,
       {
         method: 'DELETE',
         headers: {
@@ -147,7 +148,7 @@ export default function Projects() {
                   data-filter="my"
                   className="px-4 py-2 text-sm font-medium rounded-lg text-gray-600 hover:bg-gray-50"
                 >
-                  My Tasks
+                  Current Tasks
                   <span
                     data-my-count
                     className="ml-2 px-2 py-0.5 text-xs rounded-full bg-gray-100 text-gray-600"
@@ -214,7 +215,11 @@ export default function Projects() {
                   state={item.state || ''}
                   time={item.due_date || ''}
                   members={item.assignedTaskUser?.length || 0}
-                  company={item.taskClient?.business_name || 'Undefined'}
+                  company={
+                    isNonEmptyArray(item.taskClient)
+                      ? item.taskClient[0].business_address || 'Undefined'
+                      : 'Undefined'
+                  }
                   startTime={'Started:Oct 15,2024'}
                   onDetail={handleTask}
                   onDelete={handleDelete}

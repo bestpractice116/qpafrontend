@@ -1,5 +1,5 @@
-import { TypeUser } from '@/lib/types';
-import { ChangeEvent, useState } from 'react';
+import type { TypeUser } from '@/lib/types';
+import { type ChangeEvent, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { ToastContainer } from 'react-toastify';
 import Toast from '../toast';
@@ -18,14 +18,14 @@ const AddMemberModal: React.FC<AddMemberModalProps> = ({ closeModal }) => {
   });
 
   const onSubmit = async () => {
-    if (formData.password != confirmPassword) {
+    if (formData.password !== confirmPassword) {
       setPasswordError(true);
     } else {
       setPasswordError(false);
-      formData.full_name = formData.first_name + ' ' + formData.last_name;
+      formData.full_name = `${formData.first_name} ${formData.last_name}`;
       try {
         const res = await fetch(
-          'https://simple-crud-ldzp.onrender.com/register/user',
+          `${process.env.NEXT_PUBLIC_PRODUCT_BACKEND_URL}/register/user`,
           {
             method: 'POST',
             headers: {
@@ -99,7 +99,7 @@ const AddMemberModal: React.FC<AddMemberModalProps> = ({ closeModal }) => {
         <div
           className="fixed inset-0 bg-gray-900/60 backdrop-blur-sm"
           onClick={() => closeModal(false)}
-        ></div>
+        />
 
         {/* <!-- Modal Content --> */}
         <div className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-2xl max-h-[90vh] overflow-auto">
@@ -124,6 +124,7 @@ const AddMemberModal: React.FC<AddMemberModalProps> = ({ closeModal }) => {
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
+                    aria-hidden={true}
                   >
                     <path
                       strokeLinecap="round"
@@ -338,7 +339,7 @@ const AddMemberModal: React.FC<AddMemberModalProps> = ({ closeModal }) => {
                         required
                         value={String(formData.address)}
                         onChange={handleInputChange}
-                      ></textarea>
+                      />
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

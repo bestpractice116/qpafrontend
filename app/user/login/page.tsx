@@ -37,8 +37,9 @@ export default function Login() {
     try {
       setLoading(true);
       console.log(register);
+      console.log(process.env.NEXT_PUBLIC_PRODUCT_BACKEND_URL);
       const status = await fetch(
-        'https://simple-crud-ldzp.onrender.com/login',
+        `${process.env.NEXT_PUBLIC_PRODUCT_BACKEND_URL}/login`,
         {
           method: 'POST',
           headers: {
@@ -63,7 +64,7 @@ export default function Login() {
         }
         if (role === 'admin') router.push('/admin/dashboard');
         if (role === 'manager') router.push('/manager/dashboard');
-        if (role === 'member') router.push('/va/dashboard');
+        if (role === 'member') router.push('/member/dashboard');
         if (role === 'client') router.push('/client/dashboard');
       } else {
         toast.error('Invalid credentials');

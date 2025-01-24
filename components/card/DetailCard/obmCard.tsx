@@ -15,21 +15,21 @@ const OBMCard: React.FC<OBMCardProps> = ({ onClick }) => {
     progress: { used: 12, total: 20, percent: Math.floor((12 / 20) * 100) },
     teamMembers: [
       {
-        image: '/images/person1.jpg',
+        avatar: '/images/person1.jpg',
         role: 'Business Manager',
-        name: 'Sarah',
+        full_name: 'Sarah',
         status: 'Active'
       },
       {
-        image: '/images/person1.jpg',
+        avatar: '/images/person1.jpg',
         role: 'Business Manager',
-        name: 'Sarah',
+        full_name: 'Sarah',
         status: 'Active'
       },
       {
-        image: '/images/person1.jpg',
+        avatar: '/images/person1.jpg',
         role: 'Business Manager',
-        name: 'Sarah',
+        full_name: 'Sarah',
         status: 'Active'
       }
     ],

@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import { TimerProvider } from '@/store/timer-context';
+import { TimeTrackProvider } from '@/store/time-track-context';
 
 export const metadata: Metadata = {
   title: 'QPA',
@@ -15,7 +17,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head />
-      <body className="antialiased">{children}</body>
+      <body className="antialiased">
+        {/* Wrap the entire layout with the Redux Provider */}
+        <TimerProvider>
+          <TimeTrackProvider>{children}</TimeTrackProvider>
+        </TimerProvider>
+      </body>
     </html>
   );
 }

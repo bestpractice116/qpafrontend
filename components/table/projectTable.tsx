@@ -26,7 +26,7 @@ export default function ProjectTable() {
 
     const updatedCheckedItems = Object.keys(checkedItems).reduce(
       (acc, curr) => {
-        acc[parseInt(curr)] = isChecked;
+        acc[Number.parseInt(curr)] = isChecked;
         return acc;
       },
       {} as { [key: number]: boolean }
@@ -66,6 +66,7 @@ export default function ProjectTable() {
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
+                  aria-hidden={true}
                 >
                   <path
                     strokeLinecap="round"
@@ -84,6 +85,7 @@ export default function ProjectTable() {
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
+                  aria-hidden={true}
                 >
                   <path
                     strokeLinecap="round"
@@ -102,6 +104,7 @@ export default function ProjectTable() {
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
+                  aria-hidden={true}
                 >
                   <path
                     strokeLinecap="round"
@@ -120,6 +123,7 @@ export default function ProjectTable() {
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
+                  aria-hidden={true}
                 >
                   <path
                     strokeLinecap="round"
@@ -138,6 +142,7 @@ export default function ProjectTable() {
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
+                  aria-hidden={true}
                 >
                   <path
                     strokeLinecap="round"
@@ -156,6 +161,7 @@ export default function ProjectTable() {
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
+                  aria-hidden={true}
                 >
                   <path
                     strokeLinecap="round"
@@ -186,6 +192,7 @@ export default function ProjectTable() {
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
+                    aria-hidden={true}
                   >
                     <path
                       strokeLinecap="round"
@@ -232,13 +239,13 @@ export default function ProjectTable() {
                     background:
                       'linear-gradient(90deg, rgba(132, 184, 148, 0.8), rgba(132, 184, 148, 1))'
                   }}
-                ></div>
+                />
               </div>
               <div className="text-xs text-gray-500 mt-1">75% Complete</div>
             </td>
             <td className="px-4 py-3">
               <div className="flex items-center gap-1.5">
-                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500"></div>
+                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
                 <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700">
                   In Progress
                 </span>

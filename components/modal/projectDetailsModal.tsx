@@ -1,3 +1,5 @@
+import type { TypeUser } from '@/lib/types';
+import { isNonEmptyArray } from '@/lib/utils/functions';
 import React from 'react';
 
 type DateType = {
@@ -7,24 +9,24 @@ type DateType = {
 };
 
 export interface ProjectData {
-  projectTitle: string;
-  clientName: string;
-  status: string;
-  dates: DateType;
-  type: string;
-  progress: { used: number; total: number; percent: number };
-  teamMembers: { image: string; role: string; name: string; status: string }[];
+  projectTitle?: string;
+  clientName?: string;
+  status?: string;
+  dates?: DateType;
+  type?: string;
+  progress?: { used?: number; total?: number; percent?: number };
+  teamMembers?: TypeUser[];
   details: {
-    servicesProvided: string[];
-    hourlyRate: string;
-    monthlyHours: string;
-    packageLevel: string;
-    postsPerWeek: string;
-    platforms: string[];
-    projectType: string;
-    currentPhase: string;
-    technologies: string[];
-    managementAreas: string[];
+    servicesProvided?: string[];
+    hourlyRate?: string;
+    monthlyHours?: string;
+    packageLevel?: string;
+    postsPerWeek?: string;
+    platforms?: string[];
+    projectType?: string;
+    currentPhase?: string;
+    technologies?: string[];
+    managementAreas?: string[];
   };
 }
 
@@ -73,7 +75,7 @@ export default function ProjectDetailModal({
         <div className="flex items-center justify-between text-sm mb-1">
           <span className="text-gray-500">Monthly Hours</span>
           <span className="text-gray-900 font-medium">
-            {data.progress.used}/{data.progress.total} hrs
+            {data?.progress?.used}/{data?.progress?.total} hrs
           </span>
         </div>
         <div className="w-full bg-gray-100 rounded-full h-1.5">
@@ -81,8 +83,8 @@ export default function ProjectDetailModal({
             className={`bg-${
               data.type === 'va' ? 'blue' : 'indigo'
             }-500 h-1.5 rounded-full`}
-            style={{ width: `${data.progress.percent}%` }}
-          ></div>
+            style={{ width: `${data?.progress?.percent || 100}%` }}
+          />
         </div>
         <div className="grid grid-cols-3 gap-2 mt-4">
           <div className="text-center p-2 bg-gray-50 rounded-lg">
@@ -96,7 +98,7 @@ export default function ProjectDetailModal({
           <div className="text-center p-2 bg-gray-50 rounded-lg">
             <div className="text-xs text-gray-500">Remaining</div>
             <div className="text-sm font-medium text-gray-900">
-              ${data.progress.total - data.progress.used} hrs
+              ${(data?.progress?.total || 0) - (data?.progress?.used || 0)} hrs
             </div>
           </div>
         </div>
@@ -110,7 +112,7 @@ export default function ProjectDetailModal({
       wds: ['Design', 'Development', 'Testing', 'Launch']
     };
 
-    return (milestones[data.type] || []).map((milestone, index) => (
+    return (milestones[data?.type || ''] || []).map((milestone, index) => (
       <div
         key={index}
         className={`text-center p-2 ${
@@ -139,7 +141,7 @@ export default function ProjectDetailModal({
         <div className="flex items-center justify-between text-sm mb-1">
           <span className="text-gray-500">Project Progress</span>
           <span className="text-gray-900 font-medium">
-            {data.progress.percent}%
+            {data?.progress?.percent}%
           </span>
         </div>
         <div className="w-full bg-gray-100 rounded-full h-1.5">
@@ -147,8 +149,8 @@ export default function ProjectDetailModal({
             className={`bg-${
               data.type === 'smm' ? 'purple' : 'rose'
             }-500 h-1.5 rounded-full`}
-            style={{ width: `${data.progress.percent}%` }}
-          ></div>
+            style={{ width: `${data?.progress?.percent || 100}%` }}
+          />
         </div>
         <div className="grid grid-cols-4 gap-2 mt-4">
           {getMilestonesTemplate(data)}
@@ -205,7 +207,7 @@ export default function ProjectDetailModal({
             </div>
           </div>
         </>
-      ) : type == 'smm' ? (
+      ) : type === 'smm' ? (
         <>
           <div className="flex items-center justify-between text-sm">
             <span className="text-gray-500">Package Level</span>
@@ -233,7 +235,7 @@ export default function ProjectDetailModal({
             </div>
           </div>
         </>
-      ) : type == 'wds' ? (
+      ) : type === 'wds' ? (
         <>
           <div className="flex items-center justify-between text-sm">
             <span className="text-gray-500">Project Type</span>
@@ -306,7 +308,7 @@ export default function ProjectDetailModal({
     return (
       <>
         <div className="relative pl-10 pb-6  border-gray-300/50 border-l-2">
-          <div className="absolute -left-2 -top-1 w-4 h-4 rounded-full bg-brand-500"></div>
+          <div className="absolute -left-2 -top-1 w-4 h-4 rounded-full bg-brand-500" />
           <div className="text-sm space-x-2">
             <span className="font-medium text-gray-900">Sarah Wilson</span>
             <span className="text-gray-500">
@@ -316,7 +318,7 @@ export default function ProjectDetailModal({
           <span className="text-xs text-gray-400">2 hours ago</span>
         </div>
         <div className="relative pl-10 pb-6  border-gray-300/50 border-l-2 ">
-          <div className="absolute -left-2 -top-1 w-4 h-4 rounded-full bg-gray-200"></div>
+          <div className="absolute -left-2 -top-1 w-4 h-4 rounded-full bg-gray-200" />
           <div className="text-sm space-x-2">
             <span className="font-medium text-gray-900">Mike Johnson</span>
             <span className="text-gray-500">
@@ -326,7 +328,7 @@ export default function ProjectDetailModal({
           <span className="text-xs text-gray-400">Yesterday at 4:30 PM</span>
         </div>
         <div className="relative pl-10 pb-6  border-gray-300/50 border-l-2 ">
-          <div className="absolute -left-2 -top-1 w-4 h-4 rounded-full bg-gray-200"></div>
+          <div className="absolute -left-2 -top-1 w-4 h-4 rounded-full bg-gray-200" />
           <div className="text-sm space-x-2">
             <span className="font-medium text-gray-900">Emily Chen</span>
             <span className="text-gray-500">added a comment</span>
@@ -354,20 +356,23 @@ export default function ProjectDetailModal({
             <div className="flex items-center gap-4">
               <div
                 id="projectTypeIcon"
-                className={`w-10 h-10 rounded-lg flex items-center justify-center ${iconMap[type].bg}`}
+                className={`w-10 h-10 rounded-lg flex items-center justify-center ${
+                  iconMap[type || ''].bg
+                }`}
               >
                 {/* <!-- Icon will be inserted dynamically --> */}
                 <svg
-                  className={`w-5 h-5 ${iconMap[type].text}`}
+                  className={`w-5 h-5 ${iconMap[type || ''].text}`}
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
+                  aria-hidden={true}
                 >
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     strokeWidth="1.5"
-                    d={`${iconMap[type].icon}`}
+                    d={`${iconMap[type || ''].icon}`}
                   />
                 </svg>
               </div>
@@ -393,6 +398,7 @@ export default function ProjectDetailModal({
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
+                aria-hidden={true}
               >
                 <path
                   strokeLinecap="round"
@@ -413,21 +419,24 @@ export default function ProjectDetailModal({
               <div className="flex items-center gap-3">
                 <span
                   id="projectStatus"
-                  className={`inline-flex items-center ${statusColorMap[status]} px-2.5 py-1 rounded-lg text-xs font-medium`}
+                  className={`inline-flex items-center ${
+                    statusColorMap[status || 0]
+                  } px-2.5 py-1 rounded-lg text-xs font-medium`}
                 >
                   {/* <!-- Status will be inserted dynamically --> */}
                   {status}
                 </span>
-                <span className="h-4 w-px bg-gray-200"></span>
+                <span className="h-4 w-px bg-gray-200" />
                 <span id="projectDates" className="text-sm text-gray-500">
                   {/* <!-- Dates will be inserted dynamically --> */}
-                  {dates.due
-                    ? 'Due' + dates.due
-                    : dates.renewal
-                    ? 'Renews' + dates.renewal
-                    : 'Started ' + dates.start}
+                  {dates?.due
+                    ? `Due${dates?.due}`
+                    : dates?.renewal
+                    ? `Renews${dates?.renewal}`
+                    : `Started ${dates?.start}`}
                 </span>
               </div>
+              {/* biome-ignore lint/a11y/useButtonType: <explanation> */}
               <button className="text-sm text-brand-500 hover:text-brand-600 font-medium">
                 Edit Project
               </button>
@@ -437,7 +446,7 @@ export default function ProjectDetailModal({
             <div className="bg-white rounded-xl border border-gray-100 p-4">
               <div id="progressSection">
                 {/* <!-- Progress content will be inserted dynamically based on project type --> */}
-                {data.type == 'va' || data.type == 'obm'
+                {data.type === 'va' || data.type === 'obm'
                   ? getHourlyProgressTemplate(data)
                   : getFixedPriceProgressTemplate(data)}
               </div>
@@ -451,30 +460,31 @@ export default function ProjectDetailModal({
                 </h3>
                 <div id="teamMembers" className="space-y-3">
                   {/* <!-- Team members will be inserted dynamically --> */}
-                  {data.teamMembers.map((member, index) => (
-                    <div
-                      key={index}
-                      className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg"
-                    >
-                      <img
-                        src={member.image}
-                        alt={member.name}
-                        className="w-8 h-8 rounded-lg object-cover"
-                      />
-                      <div>
-                        <div className="text-sm font-medium text-gray-900">
-                          {member.name}
+                  {isNonEmptyArray(data.teamMembers) &&
+                    data.teamMembers.map((member, index) => (
+                      <div
+                        key={index}
+                        className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg"
+                      >
+                        <img
+                          src={member.avatar}
+                          alt={member.full_name}
+                          className="w-8 h-8 rounded-lg object-cover"
+                        />
+                        <div>
+                          <div className="text-sm font-medium text-gray-900">
+                            {member.full_name}
+                          </div>
+                          <div className="text-xs text-gray-500">
+                            {member.role}
+                          </div>
                         </div>
-                        <div className="text-xs text-gray-500">
-                          {member.role}
-                        </div>
+                        <span className="ml-auto flex items-center gap-1 text-xs font-medium text-green-600">
+                          <span className="w-1.5 h-1.5 bg-green-500 rounded-full" />
+                          {member.status}
+                        </span>
                       </div>
-                      <span className="ml-auto flex items-center gap-1 text-xs font-medium text-green-600">
-                        <span className="w-1.5 h-1.5 bg-green-500 rounded-full"></span>
-                        {member.status}
-                      </span>
-                    </div>
-                  ))}
+                    ))}
                 </div>
               </div>
 
@@ -506,17 +516,21 @@ export default function ProjectDetailModal({
         <div className="sticky bottom-0 bg-white border-t border-gray-100 px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
+              {/* biome-ignore lint/a11y/useButtonType: <explanation> */}
               <button className="text-sm text-gray-500 hover:text-gray-700 font-medium">
                 View Time Logs
               </button>
+              {/* biome-ignore lint/a11y/useButtonType: <explanation> */}
               <button className="text-sm text-gray-500 hover:text-gray-700 font-medium">
                 View Files
               </button>
             </div>
             <div className="flex items-center gap-3">
+              {/* biome-ignore lint/a11y/useButtonType: <explanation> */}
               <button className="px-4 py-2 text-sm font-medium text-red-600 hover:text-red-700">
                 Archive Project
               </button>
+              {/* biome-ignore lint/a11y/useButtonType: <explanation> */}
               <button className="px-4 py-2 text-sm font-medium text-white bg-brand-500 rounded-lg hover:bg-brand-600">
                 Start Timer
               </button>

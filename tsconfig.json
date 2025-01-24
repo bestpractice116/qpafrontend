@@ -23,6 +23,13 @@
     },
     "typeRoots": ["./types", "./node_modules/@types"]
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "prisma/seed.js", "app/api/auth/[...nextauth]/route.js"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "prisma/seed.js",
+    "app/api/auth/[...nextauth]/route.js"
+  ],
   "exclude": ["node_modules"]
 }
