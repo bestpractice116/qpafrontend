@@ -1,9 +1,8 @@
 'use client';
 import TimeTrackRecord1 from '@/components/timer/TimeTrackRecord1';
-import WeekNavigation from '@/components/timer/WeekNavigation';
 import { fetchTodayTimeTracksForAllUsers } from '@/hooks/api-hooks';
 import type { TypeTimeTrack } from '@/lib/types';
-import { calculateTotalDuration, formatDuration } from '@/lib/utils/date';
+import { calculateTotalDuration } from '@/lib/utils/date';
 import { isNonEmptyArray } from '@/lib/utils/functions';
 import { useEffect, useState } from 'react';
 

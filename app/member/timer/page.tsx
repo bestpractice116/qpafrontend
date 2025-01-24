@@ -20,10 +20,10 @@ import { toast } from 'react-toastify';
 import CurrentTracks from '@/components/timer/CurrentTracks';
 import { client } from '@/lib/utils/customAxios';
 import { useDispatch, useSelector } from 'react-redux';
-import type { AppDispatch, RootState } from '../../admin/reducers/store';
-import { getAllProjects } from '../../admin/reducers/projects';
 import { isNonEmptyArray } from '@/lib/utils/functions';
 import StopWatch from '@/components/timer/StopWatch';
+import { getAllProjects } from '../reducers/projects';
+import type { AppDispatch, RootState } from '../reducers/store';
 const Timer = () => {
   const [filter, setFilter] = useState(0);
   const currentTrack = useTimeTrackContext();

@@ -179,7 +179,7 @@ export default function ProjectDetailModal({
     );
 
     const typeSpecificDetails = (type: string) => {
-      return type == 'va' ? (
+      return type === 'va' ? (
         <>
           <div className="flex items-center justify-between text-sm">
             <span className="text-gray-500">Hourly Rate</span>
