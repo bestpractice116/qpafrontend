@@ -1,3 +1,5 @@
+'use client';
+
 import React, { type FC } from 'react';
 import { formatDurationWithUnits } from '@/lib/utils/date';
 import type { TypeTimeTrack } from '@/lib/types';

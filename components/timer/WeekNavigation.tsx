@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import Link from 'next/link';
 import { formatDateToDayMonth, getISOWeekDateRange } from '@/lib/utils/date';
@@ -28,10 +30,7 @@ const WeekNavigation = () => {
     >
       <Link
         className="text-primary-dark text-lg font-medium rounded-xl border border-transparent inline-flex hover:bg-skeleton transition-all"
-        href={
-          baseUrl +
-          `?start=${prevWeekDates.startDate}&end=${prevWeekDates.endDate}&view=${view}`
-        }
+        href={`${baseUrl}?start=${prevWeekDates.startDate}&end=${prevWeekDates.endDate}&view=${view}`}
         aria-label="Previous week"
       >
         <ChevronLeftIcon />

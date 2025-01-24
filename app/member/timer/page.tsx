@@ -45,6 +45,7 @@ const Timer = () => {
     currentTrack.setStartTime(new Date());
   };
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     const userId = localStorage.getItem('userId');
     setTasks(
@@ -201,6 +202,7 @@ const Timer = () => {
           </div>
           <div className="ml-4 pt-1 px-2 content-center border rounded-lg bg-blue-500">
             {!timerContext.timer && (
+              // biome-ignore lint/a11y/useButtonType: <explanation>
               <button onClick={startTimer} aria-label="Start timer">
                 <PlayIcon />
               </button>

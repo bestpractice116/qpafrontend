@@ -1,4 +1,5 @@
 'use client';
+
 import TimeTrackRecord from '@/components/timer/TimeTrackRecord';
 import WeekNavigation from '@/components/timer/WeekNavigation';
 import { fetchTodayTimeTracks } from '@/hooks/api-hooks';
@@ -66,9 +67,7 @@ const Report = () => {
             </option>
           </select>
         </div>
-        <div className="mr-5">
-          <WeekNavigation />
-        </div>
+        <div className="mr-5">{/* <WeekNavigation /> */}</div>
       </div>
       <div className="w-full">
         <h3 className="w-full border rounded-t-xl text-center bg-gradient-to-l from-[#27F090] via-[#7F41F3] to-[#F59527] px-4 py-4 md:px-10 text-[35px] font-bold text-white">

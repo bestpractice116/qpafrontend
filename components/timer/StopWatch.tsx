@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import { formatDuration } from '@/lib/utils/date';
 import { useTimerContext } from '@/hooks/use-store-hooks';
